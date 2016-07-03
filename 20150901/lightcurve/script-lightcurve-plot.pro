@@ -99,19 +99,24 @@ restore,'../context/rhessi/rhsi_nustar_flare_1sep2015_det1.dat', /v
 htime = anytim( htime, /yo )
 htime = htime[525:599]
 hrate = hrate[525:599]
+dhrate = dhrate[525:599]
 hrate = hrate-average(hrate[0:5])
 utplot, htime, hrate
 ;utplot,  htime, hrate,timerange=['1-Sep-2015 03:55:00','1-Sep-2015 04:12:00'],yrange=[0,10],ytitle='cts/s',title='5-9 keV (detector 1)'
 ;eutplot, htime, hrate,dhrate,/unc,width=5
 
 
+popen, 'small-flare-profile', xsi=8, ysi=8
 
 loadct, 0
 !p.multi=[0,2,3]
+
+; FPMA
+
 utplot,  t2a, p2a, psym=10, /nodata, back=255, col=0, yr=[-500.,4.e3], xth=3, yth=3, $
 	charsi=1.3, charth=2, /ysty, $
-	ytit = 'Counts per 30 seconds in AR', $
-	tit='Background-subtracted and livetime-corrected, all grades'
+	ytit = 'Counts per 30 seconds', $
+	tit='FPMA Background-subtracted and livetime-corrected, all grades'
 outplot, t2a, p2a, psym=10, col=224, thick=8
 outplot, t3a, p3a, psym=10, col=160, thick=8
 outplot, t4a, p4a, psym=10, col=96, thick=8
@@ -123,7 +128,7 @@ al_legend, ['2-3 keV','3-4 keV','4-5 keV','5-6 keV'], /right, box=0, line=0, thi
 loadct, 0
 utplot,  t2a, p2a/max(p2a), psym=10, /nodata, back=255, col=0, yr=[-0.3,1.1], xth=3, yth=3, $
 	charsi=1.3, charth=2, /ysty, $
-	ytit = 'Counts per 20 seconds in 5x5 arcmin', tit='Normalized'
+	ytit = 'Counts per 30 seconds', tit='FPMA Normalized'
 outplot, t2a, p2a/max(p2a), psym=0, col=224, thick=8
 outplot, t3a, p3a/max(p3a), psym=0, col=160, thick=8
 outplot, t4a, p4a/max(p4a), psym=0, col=96, thick=8
@@ -133,11 +138,13 @@ hsi_linecolors
 al_legend, ['2-3 keV','3-4 keV','4-5 keV','5-6 keV'], /right, box=0, line=0, thick=8, $
 	color=[224,160,96,13], charsi=0.8
 
+; FPMB
+
 loadct, 0
 utplot,  t2b, p2b, psym=10, /nodata, back=255, col=0, yr=[-500.,4.e3], xth=3, yth=3, $
 	charsi=1.3, charth=2, /ysty, $
-	ytit = 'Counts per 20 seconds in 5x5 arcmin', $
-	tit='Background-subtracted and livetime-corrected, all grades'
+	ytit = 'Counts per 30 seconds', $
+	tit='FPMB Background-subtracted and livetime-corrected, all grades'
 outplot, t2b, p2b, psym=10, col=224, thick=8
 outplot, t3b, p3b, psym=10, col=160, thick=8
 outplot, t4b, p4b, psym=10, col=96, thick=8
@@ -149,7 +156,7 @@ al_legend, ['2-3 keV','3-4 keV','4-5 keV','5-6 keV'], /right, box=0, line=0, thi
 loadct, 0
 utplot,  t2b, p2b/max(p2b), psym=10, /nodata, back=255, col=0, yr=[-0.3,1.1], xth=3, yth=3, $
 	charsi=1.3, charth=2, /ysty, $
-	ytit = 'Counts per 20 seconds in 5x5 arcmin', tit='Normalized'
+	ytit = 'Counts per 30 seconds', tit='FPMB Normalized'
 outplot, t2b, p2b/max(p2b), psym=0, col=224, thick=8
 outplot, t3b, p3b/max(p3b), psym=0, col=160, thick=8
 outplot, t4b, p4b/max(p4b), psym=0, col=96, thick=8
@@ -159,12 +166,13 @@ hsi_linecolors
 al_legend, ['2-3 keV','3-4 keV','4-5 keV','5-6 keV'], /right, box=0, line=0, thick=8, $
 	color=[224,160,96,13], charsi=0.8
 
+; Summed FPMA and FPMB
 
 loadct, 0
 utplot,  t2a, p2, psym=10, /nodata, back=255, col=0, yr=[-2e3,4.e4], xth=3, yth=3, $
 	charsi=1.3, charth=2, /ysty, $
-	ytit = 'Counts per 20 seconds in 5x5 arcmin', $
-	tit='Background-subtracted and livetime-corrected, all grades'
+	ytit = 'Counts per 30 seconds', $
+	tit='Summed FPMA+FPMB background-subtracted and livetime-corrected, all grades'
 outplot, t2a, p2, psym=10, col=224, thick=8
 outplot, t3a, p3, psym=10, col=160, thick=8
 outplot, t4a, p4, psym=10, col=96, thick=8
@@ -175,7 +183,7 @@ al_legend, ['2-3 keV','3-4 keV','4-5 keV','5-6 keV'], /right, box=0, line=0, thi
 loadct, 0
 utplot,  t2a, p2/max(p2), psym=10, /nodata, back=255, col=0, yr=[-0.3,1.1], xth=3, yth=3, $
 	charsi=1.3, charth=2, /ysty, $
-	ytit = 'Counts per 20 seconds in 5x5 arcmin', tit='Normalized'
+	ytit = 'Counts per 30 seconds', tit='Summed FPMA+FPMB Normalized'
 outplot, t2a, p2/max(p2), psym=0, col=224, thick=8
 outplot, t3a, p3/max(p3), psym=0, col=160, thick=8
 outplot, t4a, p4/max(p4), psym=0, col=96, thick=8
@@ -185,9 +193,8 @@ al_legend, ['2-3 keV','3-4 keV','4-5 keV','5-6 keV'], /right, box=0, line=0, thi
 	color=[224,160,96,13], charsi=0.8
 	
 
-; Another set of plots showing how NuSTAR, RHESSI and AIA line up in time.
+; Next, a set of plots showing how NuSTAR, RHESSI and AIA line up in time.
 
-popen, 'small-flare-profile', xsi=8, ysi=8
 !p.multi=[0,1,3]
 ch=2.5
 !Y.MARGIN=[0.25,0.25] 
@@ -200,7 +207,10 @@ outplot, t3a, p3/max(p3), psym=0, col=160, thick=8
 outplot, t4a, p4/max(p4), psym=0, col=96, thick=8
 outplot, t5a[2:25], p5[2:25]/max(p5), psym=0, col=0, thick=8
 hsi_linecolors
-al_legend, ['NuSTAR','2-3 keV','3-4 keV','4-5 keV','5-6 keV'], /right, box=0, line=[-1,0,0,0,0], thick=8, $
+;al_legend, ['NuSTAR FPMA+FPMB','2-3 keV','3-4 keV','4-5 keV','5-6 keV'], /right, box=0, line=[-1,0,0,0,0], thick=8, $
+;	color=[255,224,160,96,13], charsi=1.2
+al_legend, ['NuSTAR FPMA+FPMB'], /right, box=0, thick=8, color=255, charsi=1.2
+al_legend, ['','2-3 keV','3-4 keV','4-5 keV','5-6 keV'], /right, box=0, line=[-1,0,0,0,0], thick=8, $
 	color=[255,224,160,96,13], charsi=1.2
 
 loadct, 0
@@ -209,9 +219,10 @@ utplot,  t2a, p5/max(p5), /nodata, back=255, col=0, yr=[-0.3,1.2], xth=3, yth=3,
 	ytit = 'Normalized counts', xtit=''
 hsi_linecolors
 outplot, htime, hrate/max(hrate), col=12, thick=8, psym=10
+;eutplot, htime, hrate/max(hrate), dhrate/max(hrate), /unc, psym=10, thick=4, width=5
 al_legend, ['RHESSI D1 4-9 keV'], /right, box=0, thick=8, textcolor=12, charsi=1.5
 
-restore, '../context/20150901_035000_20.dat', /v
+restore, '../context/aia/20150901_035000_20.dat', /v
 ptime = p.time[istart:iend]
 pflux0 = p.flux[istart:iend,0]-p.flux[istart,0]
 pflux1 = p.flux[istart:iend,1]-p.flux[istart,1]

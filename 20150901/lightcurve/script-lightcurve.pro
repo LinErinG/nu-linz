@@ -3,6 +3,8 @@
 ; NuSTAR FPMA and FPMB emission for the Sept. 1, 2015 flare.
 ; This takes awhile!!
 ; Make sure to change data_dir to point to wherever the data are.
+; Note that the settings below produce lightcurves for *all grades* combined.
+;
 
 date = '2015-sep-01'
 time = '03:55:30'	; choose a starting time.
