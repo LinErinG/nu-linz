@@ -13,6 +13,7 @@ Installed:
 
 And the following sets of routines are needed:
   * add_path,'~/Dropbox/NuSTAR_Solar/code/', /expand
+  	* This code is copied in the "image-Dropbox-copy" folder so you could replace this line with add_path,'image-Dropbox-copy', /expand
   * add_path,'~/local-git-repo/nustar-idl/', /expand
   * add_path,'~/local-git-repo/nustar_solar/', /expand
  
