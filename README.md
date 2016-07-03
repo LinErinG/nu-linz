@@ -11,10 +11,10 @@ Installed:
   * SSWIDL
   * NuSTARDAS (only needed for pipeline, spectroscopy, and a couple other things)
 
-And the following sets of routines are needed:
-  * add_path,'~/Dropbox/NuSTAR_Solar/code/', /expand
-  	* This code is copied in the "image-Dropbox-copy" folder so you could replace this line with add_path,'image-Dropbox-copy', /expand
-  * add_path,'~/local-git-repo/nustar-idl/', /expand
-  * add_path,'~/local-git-repo/nustar_solar/', /expand
+And the following sets of routines are needed: (Note: replace "local-git-repo" with the appropriate path)
+  * NuSTAR solar code in the shared Dropbox.
+  	* This code is copied in the "image-Dropbox-copy" folder so you can just use add_path,'image-Dropbox-copy', /expand
+  * NuSTAR IDL code: add_path,'~/local-git-repo/nustar-idl/', /expand
+  * Brian's NuSTAR solar routines:  add_path,'~/local-git-repo/nustar_solar/', /expand
  
 A copy of the Dropbox NuSTAR solar code is included here for convenience.
