@@ -223,5 +223,11 @@
 	exit
 
 
-6. Load the products into xspec and do the fitting!  See additional scripts for this part.
+6. Load the products into xspec and do the fitting!
+	 To use the following lines you need to have the files and the fitting script 
+	 apec1_fit.xcm in the same directory (though you can modify easily to change that).
+	 The fitting script fits a single thermal component and is adapted from Iain/Brian's codes.
+
+	xspec
+	@apec1_fit.xcm
 	

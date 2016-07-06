@@ -1,0 +1,45 @@
+da 1:1 nu20102002001A06_cl_grade0_sr.pha 2:2 nu20102002001B06_cl_grade0_sr.pha
+statistic cstat
+setplot energy
+ignore *:0.-2.5 4.-**
+setplot rebin 25 3
+cpd /xw
+pl
+
+mo const*vapec
+1.0 -0.1
+/*
+
+untie 18
+thaw 18
+
+renorm
+abund feld
+fit 1000
+pl
+
+setplot xlog off
+pl ld rat
+
+show free
+show fit
+
+
+
+## Want the errors calculated as well?
+# error 2 17 18 33 34
+#save model sep01_apec2fit_mod.xcm
+#writefits sep01_apec2fit_mod.fits
+
+notice *: 2.0-7.0
+
+plot ldata ufspec rat
+
+
+# To write spectra and fit to file for plotting elsewhere
+# need to run these lines manually - hence commented out
+# iplot ldata ufspec rat
+# wdata sep01_apec2fit.txt
+# hard sep01_apec2.ps/cps
+# exit
+
