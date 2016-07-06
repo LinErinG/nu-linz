@@ -34,6 +34,9 @@
 	gti_out.start=anytim('01-Sep-2015 04:03')-anytim('01-Jan-2010')
 	gti_out.stop=anytim('01-Sep-2015 04:04')-anytim('01-Jan-2010')
 	mwrfits, gti_out, out_dir+'/flare_0359_0404_gti.fits', gtih
+	gti_out.start=anytim('01-Sep-2015 04:10')-anytim('01-Jan-2010')
+	gti_out.stop=anytim('01-Sep-2015 04:15')-anytim('01-Jan-2010')
+	mwrfits, gti_out, out_dir+'/flare_0410_0415_gti.fits', gtih
 
 	; Note: another syntax that can be useful here:
 	; tr = '2015-sep-01 '+['0359','0400'] 
@@ -117,7 +120,7 @@
 		srcregionfile=$reg_dir/regA.reg  \
 		attfile=$data_dir/nu20102002001_att.fits hkfile=$data_dir/nu20102002001A_fpm.hk \
 		usrgtifile=$gti_dir/flare_0359_0400_gti.fits \
-		bkgregionfile=$reg_dir/bkdA.reg		
+		bkgregionfile=$reg_dir/bkdA.reg
 	nuproducts indir=$data_dir instrument=FPMB steminputs=nu20102002001 \
 		outdir=./intervals/0359/ extended=no runmkarf=yes runmkrmf=yes \
 		infile=$data_dir/nu20102002001B06_cl_grade0.evt \
@@ -188,6 +191,22 @@
 		srcregionfile=$reg_dir/regB.reg  \
 		attfile=$data_dir/nu20102002001_att.fits hkfile=$data_dir/nu20102002001B_fpm.hk \
 		usrgtifile=$gti_dir/flare_0403_0404_gti.fits \
+		bkgregionfile=$reg_dir/bkdB.reg
+	
+	# Minute 0410-0415
+	nuproducts indir=$data_dir instrument=FPMA steminputs=nu20102002001 \
+		outdir=./intervals/0410/ extended=no runmkarf=yes runmkrmf=yes \
+		infile=$data_dir/nu20102002001A06_cl_grade0.evt \
+		srcregionfile=$reg_dir/regA.reg  \
+		attfile=$data_dir/nu20102002001_att.fits hkfile=$data_dir/nu20102002001A_fpm.hk \
+		usrgtifile=$gti_dir/flare_0410_0415_gti.fits \
+		bkgregionfile=$reg_dir/bkdA.reg
+	nuproducts indir=$data_dir instrument=FPMB steminputs=nu20102002001 \
+		outdir=./intervals/0410/ extended=no runmkarf=yes runmkrmf=yes \
+		infile=$data_dir/nu20102002001B06_cl_grade0.evt \
+		srcregionfile=$reg_dir/regB.reg  \
+		attfile=$data_dir/nu20102002001_att.fits hkfile=$data_dir/nu20102002001B_fpm.hk \
+		usrgtifile=$gti_dir/flare_0410_0415_gti.fits \
 		bkgregionfile=$reg_dir/bkdB.reg
 	
 
