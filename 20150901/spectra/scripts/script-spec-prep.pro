@@ -210,6 +210,18 @@
 		bkgregionfile=$reg_dir/bkdB.reg
 	
 
+5. Prior to starting XSPEC, we can do adaptive binning using the FTOOL GRPPHA.
+	 The following lines rebin the data so that there is a minimum of 10 counts per bin.
+	 Note: this step might not be necessary -- check your binning.
+	 Environment: C shell
 
-5. Load the products into xspec and do the fitting!  See additional scripts for this part.
+	grppha nu20102002001A06_cl_grade0_sr.pha nu20102002001A06_cl_grade0_sr_grp.pha
+	group min 10
+	exit
+	grppha nu20102002001B06_cl_grade0_sr.pha nu20102002001B06_cl_grade0_sr_grp.pha
+	group min 10
+	exit
+
+
+6. Load the products into xspec and do the fitting!  See additional scripts for this part.
 	
