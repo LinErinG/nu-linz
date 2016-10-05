@@ -100,7 +100,7 @@ htime = anytim( htime, /yo )
 htime = htime[525:599]
 hrate = hrate[525:599]
 dhrate = dhrate[525:599]
-hrate = hrate-average(hrate[0:5])
+;hrate = hrate-average(hrate[0:5])
 utplot, htime, hrate
 ;utplot,  htime, hrate,timerange=['1-Sep-2015 03:55:00','1-Sep-2015 04:12:00'],yrange=[0,10],ytitle='cts/s',title='5-9 keV (detector 1)'
 ;eutplot, htime, hrate,dhrate,/unc,width=5
@@ -195,10 +195,22 @@ al_legend, ['2-3 keV','3-4 keV','4-5 keV','5-6 keV'], /right, box=0, line=0, thi
 
 ; Next, a set of plots showing how NuSTAR, RHESSI and AIA line up in time.
 
-!p.multi=[0,1,3]
+!p.multi=[0,1,4]
 ch=2.5
 !Y.MARGIN=[0.25,0.25] 
 loadct, 0
+utplot,  t2a, p2, psym=10, /nodata, back=255, col=0, yr=[-1e3,8.e3], xth=3, yth=3, $
+	charsi=ch, charth=2, /ysty, /noxticks, xtit='', $
+	ytit = 'Counts per 30 seconds', $
+	;	tit='Summed FPMA+FPMB background-subtracted and livetime-corrected, all grades'
+	tit=''
+outplot, t2a, p2, psym=10, col=224, thick=8
+outplot, t3a, p3, psym=10, col=160, thick=8
+outplot, t4a, p4, psym=10, col=96, thick=8
+outplot, t5a, p5, psym=10, col=0, thick=8
+al_legend, ['2-3 keV','3-4 keV','4-5 keV','5-6 keV'], /right, box=0, line=0, thick=8, $
+	color=[224,160,96,0], charsi=0.8
+
 utplot,  t2a, p2/max(p2), psym=10, /nodata, back=255, col=0, yr=[-0.3,1.2], xth=3, yth=3, $
 	charsi=ch, charth=2, /ysty, /noxticks, $
 	ytit = 'Normalized counts', xtit=''
@@ -214,12 +226,12 @@ al_legend, ['','2-3 keV','3-4 keV','4-5 keV','5-6 keV'], /right, box=0, line=[-1
 	color=[255,224,160,96,13], charsi=1.2
 
 loadct, 0
-utplot,  t2a, p5/max(p5), /nodata, back=255, col=0, yr=[-0.3,1.2], xth=3, yth=3, $
+utplot,  t2a, p5/max(p5), /nodata, back=255, col=0, yr=[0.,12.], xth=3, yth=3, $
 	charsi=ch, charth=2, /ysty, thick=8, $
-	ytit = 'Normalized counts', xtit=''
+	ytit = 'Counts second!U-1!N', xtit=''
 hsi_linecolors
-outplot, htime, hrate/max(hrate), col=12, thick=8, psym=10
-;eutplot, htime, hrate/max(hrate), dhrate/max(hrate), /unc, psym=10, thick=4, width=5
+outplot, htime, hrate, col=12, thick=8, psym=10
+;eutplot, htime, hrate, dhrate, /unc, psym=10, thick=4, width=5
 al_legend, ['RHESSI D1 4-9 keV'], /right, box=0, thick=8, textcolor=12, charsi=1.5
 
 restore, '../context/aia/20150901_035000_20.dat', /v
