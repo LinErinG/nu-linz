@@ -159,11 +159,9 @@ utplot, ma.time, shifta[0,*], psym=10, $;yra=minmax([shifta[0,*],shiftb[0,*]]), 
 outplot, ma.time, smootha[0,*], thick=4
 outplot, mb.time, shiftb[0,*], col=6, psym=10
 outplot, mb.time, smoothb[0,*], col=6, thick=4
-outplot, mSum.time, shiftSum[0,*], col=7, psym=10
-outplot, mSum.time, smoothSum[0,*], col=7, thick=4
 outplot, chu_time, chu_change*1000., col=12
 outplot, chu_time, -chu_change*1000., col=12
-al_legend, ['FPMA','FPMB','2A+B'], textcolor=[0,6,7], box=0, /right, charsi=0.8
+al_legend, ['FPMA','FPMB'], textcolor=[0,6], box=0, /right, charsi=0.8
 al_legend, ['Trend lines show data smoothed over '+strtrim(boxcar,2)+' points.'], /left, $
 	/bot, box=0, charsi=0.7
 	
@@ -173,11 +171,9 @@ utplot, ma.time, shifta[1,*], psym=10, yra=minmax([shifta[1,*],shiftb[1,*]]), $
 outplot, ma.time, smootha[1,*], thick=4
 outplot, mb.time, shiftb[1,*], col=6, psym=10
 outplot, mb.time, smoothb[1,*], col=6, thick=4
-outplot, mSum.time, shiftSum[1,*], col=7, psym=10
-outplot, mSum.time, smoothSum[1,*], col=7, thick=4
 outplot, chu_time, chu_change*1000., col=12
 outplot, chu_time, -chu_change*1000., col=12
-al_legend, ['FPMA','FPMB','2A+B'], textcolor=[0,6,7], box=0, /right, charsi=0.8
+al_legend, ['FPMA','FPMB'], textcolor=[0,6], box=0, /right, charsi=0.8
 al_legend, ['Trend lines show data smoothed over '+strtrim(boxcar,2)+' points.'], /left, $
 	/bot, box=0, charsi=0.7
 
@@ -186,10 +182,18 @@ al_legend, ['Trend lines show data smoothed over '+strtrim(boxcar,2)+' points.']
 ;pclose
 
 for i=0, n_elements(mSum)-1 do mSum[i].data = smooth(mSum[i].data,20)
+for i=0, n_elements(ma)-1 do ma[i].data = smooth(ma[i].data,20)
+for i=0, n_elements(mb)-1 do mb[i].data = smooth(mb[i].data,20)
 corrected_map = mSum
+corrected_mapA = mA
+corrected_mapB = mB
 mSum.id = 'Uncorrected A+B'
 corrected_map.id = 'Corrected A+B'
+corrected_mapA.id = 'Corrected A'
+corrected_mapB.id = 'Corrected B'
 for i=0, n_elements(mSum)-1 do corrected_map[i] = shift_map( mSum[i], smoothSum[0,i], smoothSum[1,i] )
+for i=0, n_elements(mA)-1 do corrected_mapA[i] = shift_map( mA[i], smoothA[0,i], smoothA[1,i] )
+for i=0, n_elements(mB)-1 do corrected_mapB[i] = shift_map( mB[i], smoothB[0,i], smoothB[1,i] )
 ;for i=0, n_elements(mSum)-1 do corrected_map[i] = shift_map( mSum[i], shiftSum[0,i], shiftSum[1,i] )
 
 
@@ -197,18 +201,51 @@ loadct,1
 reverse_ct
 map1 = fexviii[1:*]
 map2 = fexviii[1:*]
+map3 = fexviii[1:*]
 map1.id='Fe18 + Sum FPMA+B, no alignment'
-map2.id='Coaligned'
-mpeg_movie_map_double, map1, map2, cmap1=mSum, cmap2=corrected_map, /log, $
-$	lev=[10,30,50,70,90], /per
-	lev=[2.,4.,6.,8.,10.,12.]
+map2.id='Coaligned A'
+map3.id='Coaligned B'
+mpeg_movie_map_triple, map1, map2, map3, cmap1=mSum, cmap2=corrected_mapA, cmap3=corrected_mapB, /log, $
+	lev=[10,30,50,70,90], /per
+$	lev=[2.,4.,6.,8.,10.,12.]
 
 
+;popen, 'nustar-coalignment-sept1', xsi=9, ysi=6, /land
+; investigate coalignment trends over time...
+!p.multi=[0,2,1]
 loadct,1
 reverse_ct
-; investigate coalignment trends over time...
-plot_map, map1, /log, cen=[930,-230], fov=5
+plot_map, map2, /log, cen=[930,-230], fov=5, col=255
 loadct,5
-for i=0, n_elements(corrected_map)-1 do plot_map, corrected_map[i], /over, col=2*i, lev=4.,thick=2
+for i=0, n_elements(corrected_map)-1 do plot_map, corrected_mapA[i], /over, col=2*i, lev=[20.], /per,thick=2
+loadct,1
+reverse_ct
+plot_map, map3, /log, cen=[930,-230], fov=5, col=255
+loadct,5
+for i=0, n_elements(corrected_map)-1 do plot_map, corrected_mapB[i], /over, col=2*i, lev=[20.], /per,thick=2
+;pclose
+;spawn, 'open nustar-coalignment-sept1.ps'
 
+;; IMPORTANT NOTE: in examining the results, it looks like FPMA is far more reliable for the alignment than FPMB!
+;; Use only the FPMA coalignment for the Sept 1 2015 observation.
 
+; Now, write the results to a text file that can be used for future analysis work.
+openw,lun, '20150901_alignment_aiafexviii_v20161019.txt', /get_lun
+; First, write a 'header' saying what's in the file.
+printf, lun, 'NuSTAR alignment corrections'
+printf, lun, '20150901 observation date'
+printf, lun, 'OBSID 20102002001'
+printf, lun, 'FPMA'
+printf, lun, 'Orbit 2'
+printf, lun, 'Reference is AIA FeXVIII'
+printf, lun, 'Coalignment performed on 20161019'
+printf, lun, ''
+printf, lun, ''
+printf, lun, ''
+printf, lun, ''
+; Now write the alignment corrections.
+printf, lun, 'Time                    X correction     Y correction'
+for i=0, n_elements(corrected_map)-1 do printf, lun, ma[i].time, smootha[0,i], smootha[0,i]
+; Close the file and free up the logical unit.
+close, lun
+free_lun, lun
