@@ -245,7 +245,7 @@ printf, lun, ''
 printf, lun, ''
 ; Now write the alignment corrections.
 printf, lun, 'Time                X correction[arcsec]  Y correction[arcsec]'
-for i=0, n_elements(corrected_map)-1 do printf, lun, ma[i].time, smootha[0,i], smootha[0,i]
+for i=0, n_elements(ma)-1 do printf, lun, ma[i].time, smootha[0,i], smootha[1,i]
 ; Close the file and free up the logical unit.
 close, lun
 free_lun, lun

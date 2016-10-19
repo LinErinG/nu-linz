@@ -1,6 +1,8 @@
 ;
-; Script for getting the data ready for spectral fitting.
+; Script for prepping the 20150901 data for spectral fitting.
 ; This is based on Iain's example (xspec_info_010915.txt)
+; Note that data is prepped to fit over 1-min time intervals for the first 20
+; min of the observation.
 ;
 
 
@@ -16,37 +18,45 @@
 	gti = mrdfits(gti_file, 1, gtih)
 	gti_out=gti
 
-	gti_out.start=anytim('01-Sep-2015 03:59')-anytim('01-Jan-2010')
-	gti_out.stop=anytim('01-Sep-2015 04:00')-anytim('01-Jan-2010')
-	mwrfits, gti_out, out_dir+'/flare_0359_0400_gti.fits', gtih
-	gti_out.start=anytim('01-Sep-2015 04:00')-anytim('01-Jan-2010')
-	gti_out.stop=anytim('01-Sep-2015 04:01')-anytim('01-Jan-2010')
-	mwrfits, gti_out, out_dir+'/flare_0400_0401_gti.fits', gtih
-	gti_out.start=anytim('01-Sep-2012 04:01')-anytim('01-Jan-2010')
-	gti_out.stop=anytim('01-Sep-2015 04:02')-anytim('01-Jan-2010')
-	mwrfits, gti_out, out_dir+'/flare_0401_0402_gti.fits', gtih
-	gti_out.start=anytim('01-Sep-2015 04:02')-anytim('01-Jan-2010')
-	gti_out.stop=anytim('01-Sep-2015 04:03')-anytim('01-Jan-2010')
-	mwrfits, gti_out, out_dir+'/flare_0402_0403_gti.fits', gtih
-	gti_out.start=anytim('01-Sep-2015 04:03')-anytim('01-Jan-2010')
-	gti_out.stop=anytim('01-Sep-2015 04:04')-anytim('01-Jan-2010')
-	mwrfits, gti_out, out_dir+'/flare_0403_0404_gti.fits', gtih
-	gti_out.start=anytim('01-Sep-2015 04:03')-anytim('01-Jan-2010')
-	gti_out.stop=anytim('01-Sep-2015 04:04')-anytim('01-Jan-2010')
-	mwrfits, gti_out, out_dir+'/flare_0359_0404_gti.fits', gtih
-	gti_out.start=anytim('01-Sep-2015 04:10')-anytim('01-Jan-2010')
-	gti_out.stop=anytim('01-Sep-2015 04:15')-anytim('01-Jan-2010')
-	mwrfits, gti_out, out_dir+'/flare_0410_0415_gti.fits', gtih
+	; Set up time intervals.
+	t0 = '2015-sep-01 0355'
+	int = anytim(t0) + 60.*findgen(21)
 
-	; Note: another syntax that can be useful here:
-	; tr = '2015-sep-01 '+['0359','0400'] 
-	; tr_nu = convert_nustar_time( anytim(tr,/vms), /from_ut )  
-	; gti_out.start = tr_nu[0]
-	; gti_out.stop = tr_nu[1]
+	.run
+	for i=0, n_elements(int)-2 do begin
+		tr_nu = convert_nustar_time( anytim(int[i:i+1],/vms), /from_ut )  
+		gti_out.start = tr_nu[0]
+		gti_out.stop = tr_nu[1]
+		str = strmid(anytim(tr_nu,/yo),10,2)+strmid(anytim(tr_nu,/yo),13,2)
+		mwrfits, gti_out, out_dir+'/flare_'+str[0]+'_'+str[1]+'_gti.fits', gtih
+	endfor
+	end
+
+;	gti_out.start=anytim('01-Sep-2015 03:59')-anytim('01-Jan-2010')
+;	gti_out.stop=anytim('01-Sep-2015 04:00')-anytim('01-Jan-2010')
+;	mwrfits, gti_out, out_dir+'/flare_0359_0400_gti.fits', gtih
+;	gti_out.start=anytim('01-Sep-2015 04:00')-anytim('01-Jan-2010')
+;	gti_out.stop=anytim('01-Sep-2015 04:01')-anytim('01-Jan-2010')
+;	mwrfits, gti_out, out_dir+'/flare_0400_0401_gti.fits', gtih
+;	gti_out.start=anytim('01-Sep-2012 04:01')-anytim('01-Jan-2010')
+;	gti_out.stop=anytim('01-Sep-2015 04:02')-anytim('01-Jan-2010')
+;	mwrfits, gti_out, out_dir+'/flare_0401_0402_gti.fits', gtih
+;	gti_out.start=anytim('01-Sep-2015 04:02')-anytim('01-Jan-2010')
+;	gti_out.stop=anytim('01-Sep-2015 04:03')-anytim('01-Jan-2010')
+;	mwrfits, gti_out, out_dir+'/flare_0402_0403_gti.fits', gtih
+;	gti_out.start=anytim('01-Sep-2015 04:03')-anytim('01-Jan-2010')
+;	gti_out.stop=anytim('01-Sep-2015 04:04')-anytim('01-Jan-2010')
+;	mwrfits, gti_out, out_dir+'/flare_0403_0404_gti.fits', gtih
+;	gti_out.start=anytim('01-Sep-2015 04:03')-anytim('01-Jan-2010')
+;	gti_out.stop=anytim('01-Sep-2015 04:04')-anytim('01-Jan-2010')
+;	mwrfits, gti_out, out_dir+'/flare_0359_0404_gti.fits', gtih
+;	gti_out.start=anytim('01-Sep-2015 04:10')-anytim('01-Jan-2010')
+;	gti_out.stop=anytim('01-Sep-2015 04:15')-anytim('01-Jan-2010')
+;	mwrfits, gti_out, out_dir+'/flare_0410_0415_gti.fits', gtih
 
 
 
-2. Create an eventlist that is only grade 0, for the whole flare (flare_0359_0404).
+2. Create an eventlist that is only grade 0 for 30 sec around the flare peak (0400-0430)
    Since this is a generally useful output, put it in the directory where the untouched 
    event list is kept.
    Environment: CSHELL
@@ -81,10 +91,10 @@
 
 	; Note: this should be done with a 1-min file, but I'm having trouble generating it using
 	; nuscreen.  Instead, I kluged one together by hand to use for the DS9 selection.
-	; For each A and B, I selected a 0.5 arcmin region, taking care to try to avoid the 
-	; edge pixels where possible.  0.5 arcmin is bigger than it needs to be, but I lose some
-	; emission at the chip edge.  I then selected a background in another region of the 
-	; flare (though this isn't really the right way to do it...)
+	; For each A and B, I selected a 0.5 arcmin region, diameter taking care to try to 
+	; avoid the edge pixels where possible.  Note the FPMA circle is good, but the 
+	; FPMB circle is a bit offset to avoid the edge.  In both cases, we could run into
+	; trouble as the drift makes our region go off the edge!
 
 	; This is a kludge to get a 1-minute event list for the time of the flare only.
 	; Environment: SSWIDL
@@ -92,18 +102,18 @@
 	f=file_search(data_dir+'*06_cl.evt') 
 	evta = mrdfits(f[0],1,evtah) 
 	evtb = mrdfits(f[1],1,evtbh) 
-	tr = '2015-sep-01 '+['0359','0400'] 
+	tr = '2015-sep-01 '+['0400','040030'] 
 	tr_nu = convert_nustar_time( anytim(tr,/vms), /from_ut )  
 	evta = evta[ where( evta.time gt tr_nu[0] and evta.time lt tr_nu[1] ) ]
 	evtb = evtb[ where( evtb.time gt tr_nu[0] and evtb.time lt tr_nu[1] ) ]
-	mwrfits, evta, 'nu20102002001A06_cl_1min.evt',evtah,/create  
-	mwrfits, evtb, 'nu20102002001B06_cl_1min.evt',evtbh,/create  
+	mwrfits, evta, 'nu20102002001A06_cl_peak.evt',evtah,/create  
+	mwrfits, evtb, 'nu20102002001B06_cl_peak.evt',evtbh,/create  
 
 	#Then proceed to DS9
 	#Environment: CSHELL
 
-	ds9 ./nu20102002001A06_cl_1min.evt
-	ds9 ./nu20102002001B06_cl_1min.evt
+	ds9 ./nu20102002001A06_cl_peak.evt
+	ds9 ./nu20102002001B06_cl_peak.evt
 
 
 4. Make the spectrum (*.pha) and response files (*.arf, *.rmf) for chosen region, time range and Grade 0
@@ -120,7 +130,7 @@
 		srcregionfile=$reg_dir/regA.reg  \
 		attfile=$data_dir/nu20102002001_att.fits hkfile=$data_dir/nu20102002001A_fpm.hk \
 		usrgtifile=$gti_dir/flare_0359_0400_gti.fits \
-		bkgregionfile=$reg_dir/bkdA.reg
+		bkgregionfile=$reg_dir/bkdA.reg 
 	nuproducts indir=$data_dir instrument=FPMB steminputs=nu20102002001 \
 		outdir=./intervals/0359/ extended=no runmkarf=yes runmkrmf=yes \
 		infile=$data_dir/nu20102002001B06_cl_grade0.evt \
@@ -229,5 +239,7 @@
 	 The fitting script fits a single thermal component and is adapted from Iain/Brian's codes.
 
 	xspec
-	@apec1_fit.xcm
+	@xspec/apec1_fit.xcm
+	
+	See SCRIPT_XSPEC for more xspec fitting commands used for this analysis.
 	
