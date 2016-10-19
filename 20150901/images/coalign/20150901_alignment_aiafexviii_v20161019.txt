@@ -9,7 +9,7 @@ Coalignment performed on 20161019
 
 
 
-Time                    X correction     Y correction
+Time                X correction[arcsec]  Y correction[arcsec]
  1-Sep-2015 03:55:21.000     -19.0198     -19.0198
  1-Sep-2015 03:55:33.000     -29.4237     -29.4237
  1-Sep-2015 03:55:45.000     -28.3408     -28.3408
