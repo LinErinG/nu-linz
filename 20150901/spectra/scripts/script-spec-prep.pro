@@ -32,29 +32,6 @@
 	endfor
 	end
 
-;	gti_out.start=anytim('01-Sep-2015 03:59')-anytim('01-Jan-2010')
-;	gti_out.stop=anytim('01-Sep-2015 04:00')-anytim('01-Jan-2010')
-;	mwrfits, gti_out, out_dir+'/flare_0359_0400_gti.fits', gtih
-;	gti_out.start=anytim('01-Sep-2015 04:00')-anytim('01-Jan-2010')
-;	gti_out.stop=anytim('01-Sep-2015 04:01')-anytim('01-Jan-2010')
-;	mwrfits, gti_out, out_dir+'/flare_0400_0401_gti.fits', gtih
-;	gti_out.start=anytim('01-Sep-2012 04:01')-anytim('01-Jan-2010')
-;	gti_out.stop=anytim('01-Sep-2015 04:02')-anytim('01-Jan-2010')
-;	mwrfits, gti_out, out_dir+'/flare_0401_0402_gti.fits', gtih
-;	gti_out.start=anytim('01-Sep-2015 04:02')-anytim('01-Jan-2010')
-;	gti_out.stop=anytim('01-Sep-2015 04:03')-anytim('01-Jan-2010')
-;	mwrfits, gti_out, out_dir+'/flare_0402_0403_gti.fits', gtih
-;	gti_out.start=anytim('01-Sep-2015 04:03')-anytim('01-Jan-2010')
-;	gti_out.stop=anytim('01-Sep-2015 04:04')-anytim('01-Jan-2010')
-;	mwrfits, gti_out, out_dir+'/flare_0403_0404_gti.fits', gtih
-;	gti_out.start=anytim('01-Sep-2015 04:03')-anytim('01-Jan-2010')
-;	gti_out.stop=anytim('01-Sep-2015 04:04')-anytim('01-Jan-2010')
-;	mwrfits, gti_out, out_dir+'/flare_0359_0404_gti.fits', gtih
-;	gti_out.start=anytim('01-Sep-2015 04:10')-anytim('01-Jan-2010')
-;	gti_out.stop=anytim('01-Sep-2015 04:15')-anytim('01-Jan-2010')
-;	mwrfits, gti_out, out_dir+'/flare_0410_0415_gti.fits', gtih
-
-
 
 2. Create an eventlist that is only grade 0 for 30 sec around the flare peak (0400-0430)
    Since this is a generally useful output, put it in the directory where the untouched 
@@ -87,14 +64,11 @@
 	
 
 
-2. In ds9 make the source region file, one doing A and B, call it flare_reg.reg (maybe need slighlty diff regions per A/B?)
+2. In ds9 make the source region file.  Make sure to save it in decimal degrees (not dd:mm:ss).
 
 	; Note: this should be done with a 1-min file, but I'm having trouble generating it using
 	; nuscreen.  Instead, I kluged one together by hand to use for the DS9 selection.
-	; For each A and B, I selected a 0.5 arcmin region, diameter taking care to try to 
-	; avoid the edge pixels where possible.  Note the FPMA circle is good, but the 
-	; FPMB circle is a bit offset to avoid the edge.  In both cases, we could run into
-	; trouble as the drift makes our region go off the edge!
+	; For each A and B, I selected a 0.5 arcmin region diameter.
 
 	; This is a kludge to get a 1-minute event list for the time of the flare only.
 	; Environment: SSWIDL
@@ -115,109 +89,69 @@
 	ds9 ./nu20102002001A06_cl_peak.evt
 	ds9 ./nu20102002001B06_cl_peak.evt
 
+3.  Adjust the regions we just saved to work for other time intervals.  Use the co-alignment
+	with AIA to adjust the region center based on time.  This is done in IDL simply 
+	because that's easiest for me.
+	
+	time_ref = '2015-09-01 04:00:30'
+	align_file = 'regions/20150901_alignment_aiafexviii_v20161019.txt'
+	indir = 'regions/'
+	outdir = 'regions/correct_align/'
+	regA = 'regA_peak.reg'
+	regB = 'regB_peak.reg'
+
+	nustar_adjust_region, '2015-09-01 03:55:30', time_ref, regA, align_file, indir=indir, outdir=outdir, new='regA_0355.reg'
+	nustar_adjust_region, '2015-09-01 03:56:30', time_ref, regA, align_file, indir=indir, outdir=outdir, new='regA_0356.reg'
+	nustar_adjust_region, '2015-09-01 03:57:30', time_ref, regA, align_file, indir=indir, outdir=outdir, new='regA_0357.reg'
+	nustar_adjust_region, '2015-09-01 03:58:30', time_ref, regA, align_file, indir=indir, outdir=outdir, new='regA_0358.reg'
+	nustar_adjust_region, '2015-09-01 03:59:30', time_ref, regA, align_file, indir=indir, outdir=outdir, new='regA_0359.reg'
+	nustar_adjust_region, '2015-09-01 04:00:30', time_ref, regA, align_file, indir=indir, outdir=outdir, new='regA_0400.reg'
+	nustar_adjust_region, '2015-09-01 04:01:30', time_ref, regA, align_file, indir=indir, outdir=outdir, new='regA_0401.reg'
+	nustar_adjust_region, '2015-09-01 04:02:30', time_ref, regA, align_file, indir=indir, outdir=outdir, new='regA_0402.reg'
+	nustar_adjust_region, '2015-09-01 04:03:30', time_ref, regA, align_file, indir=indir, outdir=outdir, new='regA_0403.reg'
+	nustar_adjust_region, '2015-09-01 04:04:30', time_ref, regA, align_file, indir=indir, outdir=outdir, new='regA_0404.reg'
+	nustar_adjust_region, '2015-09-01 04:05:30', time_ref, regA, align_file, indir=indir, outdir=outdir, new='regA_0405.reg'
+	nustar_adjust_region, '2015-09-01 04:06:30', time_ref, regA, align_file, indir=indir, outdir=outdir, new='regA_0406.reg'
+	nustar_adjust_region, '2015-09-01 04:07:30', time_ref, regA, align_file, indir=indir, outdir=outdir, new='regA_0407.reg'
+	nustar_adjust_region, '2015-09-01 04:08:30', time_ref, regA, align_file, indir=indir, outdir=outdir, new='regA_0408.reg'
+	nustar_adjust_region, '2015-09-01 04:09:30', time_ref, regA, align_file, indir=indir, outdir=outdir, new='regA_0409.reg'
+	nustar_adjust_region, '2015-09-01 04:10:30', time_ref, regA, align_file, indir=indir, outdir=outdir, new='regA_0410.reg'
+	nustar_adjust_region, '2015-09-01 04:11:30', time_ref, regA, align_file, indir=indir, outdir=outdir, new='regA_0411.reg'
+	nustar_adjust_region, '2015-09-01 04:12:30', time_ref, regA, align_file, indir=indir, outdir=outdir, new='regA_0412.reg'
+	nustar_adjust_region, '2015-09-01 04:13:30', time_ref, regA, align_file, indir=indir, outdir=outdir, new='regA_0413.reg'
+	nustar_adjust_region, '2015-09-01 04:14:30', time_ref, regA, align_file, indir=indir, outdir=outdir, new='regA_0414.reg'
+
+
 
 4. Make the spectrum (*.pha) and response files (*.arf, *.rmf) for chosen region, time range and Grade 0
    Note that assuming all in same CHU during time range so don't need to filter for that
 
 	set data_dir=/Users/glesener/data/nustar/20150901/20102002001/event_cl
-	set reg_dir=./regions
-	set gti_dir=./gti
-
-	# Minute 0359-0400
+	set reg_dir=./regions/correct_align
+	set gti_dir=./gti	
+	
 	nuproducts indir=$data_dir instrument=FPMA steminputs=nu20102002001 \
 		outdir=./intervals/0359/ extended=no runmkarf=yes runmkrmf=yes \
-		infile=$data_dir/nu20102002001A06_cl_grade0.evt \
-		srcregionfile=$reg_dir/regA.reg  \
+		infile=$data_dir/nu20102002001A06_cl.evt \
+		bkgextract=no \
+		srcregionfile=$reg_dir/regA_0359.reg  \
 		attfile=$data_dir/nu20102002001_att.fits hkfile=$data_dir/nu20102002001A_fpm.hk \
-		usrgtifile=$gti_dir/flare_0359_0400_gti.fits \
-		bkgregionfile=$reg_dir/bkdA.reg 
-	nuproducts indir=$data_dir instrument=FPMB steminputs=nu20102002001 \
-		outdir=./intervals/0359/ extended=no runmkarf=yes runmkrmf=yes \
-		infile=$data_dir/nu20102002001B06_cl_grade0.evt \
-		srcregionfile=$reg_dir/regB.reg  \
-		attfile=$data_dir/nu20102002001_att.fits hkfile=$data_dir/nu20102002001B_fpm.hk \
-		usrgtifile=$gti_dir/flare_0359_0400_gti.fits \
-		bkgregionfile=$reg_dir/bkdB.reg
-	
-	# Minute 0400-0401
-	nuproducts indir=$data_dir instrument=FPMA steminputs=nu20102002001 \
-		outdir=./intervals/0400/ extended=no runmkarf=yes runmkrmf=yes \
-		infile=$data_dir/nu20102002001A06_cl_grade0.evt \
-		srcregionfile=$reg_dir/regA.reg  \
-		attfile=$data_dir/nu20102002001_att.fits hkfile=$data_dir/nu20102002001A_fpm.hk \
-		usrgtifile=$gti_dir/flare_0400_0401_gti.fits \
-		bkgregionfile=$reg_dir/bkdA.reg
-	nuproducts indir=$data_dir instrument=FPMB steminputs=nu20102002001 \
-		outdir=./intervals/0400/ extended=no runmkarf=yes runmkrmf=yes \
-		infile=$data_dir/nu20102002001B06_cl_grade0.evt \
-		srcregionfile=$reg_dir/regB.reg  \
-		attfile=$data_dir/nu20102002001_att.fits hkfile=$data_dir/nu20102002001B_fpm.hk \
-		usrgtifile=$gti_dir/flare_0400_0401_gti.fits \
-		bkgregionfile=$reg_dir/bkdB.reg
+		usrgtifile=$gti_dir/flare_0359_0400_gti.fits
 
-	# Minute 0401-0402
-	nuproducts indir=$data_dir instrument=FPMA steminputs=nu20102002001 \
-		outdir=./intervals/0401/ extended=no runmkarf=yes runmkrmf=yes \
-		infile=$data_dir/nu20102002001A06_cl_grade0.evt \
-		srcregionfile=$reg_dir/regA.reg  \
-		attfile=$data_dir/nu20102002001_att.fits hkfile=$data_dir/nu20102002001A_fpm.hk \
-		usrgtifile=$gti_dir/flare_0401_0402_gti.fits \
-		bkgregionfile=$reg_dir/bkdA.reg
-	nuproducts indir=$data_dir instrument=FPMB steminputs=nu20102002001 \
-		outdir=./intervals/0401/ extended=no runmkarf=yes runmkrmf=yes \
-		infile=$data_dir/nu20102002001B06_cl_grade0.evt \
-		srcregionfile=$reg_dir/regB.reg  \
-		attfile=$data_dir/nu20102002001_att.fits hkfile=$data_dir/nu20102002001B_fpm.hk \
-		usrgtifile=$gti_dir/flare_0401_0402_gti.fits \
-		bkgregionfile=$reg_dir/bkdB.reg
+	foreach num ( 355 356 357 358 359 400 401 402 403 404 405 406 407 408 409 410 411 412 413 414 )
+		@ numplus = $num + 1
+		set gti_file = "flare_0$num""_0$numplus""_gti.fits"
+		set interval = "0"$num
+		nuproducts indir=$data_dir instrument=FPMA steminputs=nu20102002001 \
+			outdir=./intervals/$interval/ extended=no runmkarf=yes runmkrmf=yes \
+			infile=$data_dir/nu20102002001A06_cl.evt \
+			bkgextract=no \
+			srcregionfile=$reg_dir/regA_0$num.reg  \
+			attfile=$data_dir/nu20102002001_att.fits hkfile=$data_dir/nu20102002001A_fpm.hk \
+			usrgtifile=$gti_dir/$gti_file
+	end
 
-	# Minute 0402-0403
-	nuproducts indir=$data_dir instrument=FPMA steminputs=nu20102002001 \
-		outdir=./intervals/0402/ extended=no runmkarf=yes runmkrmf=yes \
-		infile=$data_dir/nu20102002001A06_cl_grade0.evt \
-		srcregionfile=$reg_dir/regA.reg  \
-		attfile=$data_dir/nu20102002001_att.fits hkfile=$data_dir/nu20102002001A_fpm.hk \
-		usrgtifile=$gti_dir/flare_0402_0403_gti.fits \
-		bkgregionfile=$reg_dir/bkdA.reg
-	nuproducts indir=$data_dir instrument=FPMB steminputs=nu20102002001 \
-		outdir=./intervals/0402/ extended=no runmkarf=yes runmkrmf=yes \
-		infile=$data_dir/nu20102002001B06_cl_grade0.evt \
-		srcregionfile=$reg_dir/regB.reg  \
-		attfile=$data_dir/nu20102002001_att.fits hkfile=$data_dir/nu20102002001B_fpm.hk \
-		usrgtifile=$gti_dir/flare_0402_0403_gti.fits \
-		bkgregionfile=$reg_dir/bkdB.reg
 
-	# Minute 0403-0404
-	nuproducts indir=$data_dir instrument=FPMA steminputs=nu20102002001 \
-		outdir=./intervals/0403/ extended=no runmkarf=yes runmkrmf=yes \
-		infile=$data_dir/nu20102002001A06_cl_grade0.evt \
-		srcregionfile=$reg_dir/regA.reg  \
-		attfile=$data_dir/nu20102002001_att.fits hkfile=$data_dir/nu20102002001A_fpm.hk \
-		usrgtifile=$gti_dir/flare_0403_0404_gti.fits \
-		bkgregionfile=$reg_dir/bkdA.reg
-	nuproducts indir=$data_dir instrument=FPMB steminputs=nu20102002001 \
-		outdir=./intervals/0403/ extended=no runmkarf=yes runmkrmf=yes \
-		infile=$data_dir/nu20102002001B06_cl_grade0.evt \
-		srcregionfile=$reg_dir/regB.reg  \
-		attfile=$data_dir/nu20102002001_att.fits hkfile=$data_dir/nu20102002001B_fpm.hk \
-		usrgtifile=$gti_dir/flare_0403_0404_gti.fits \
-		bkgregionfile=$reg_dir/bkdB.reg
-	
-	# Minute 0410-0415
-	nuproducts indir=$data_dir instrument=FPMA steminputs=nu20102002001 \
-		outdir=./intervals/0410/ extended=no runmkarf=yes runmkrmf=yes \
-		infile=$data_dir/nu20102002001A06_cl_grade0.evt \
-		srcregionfile=$reg_dir/regA.reg  \
-		attfile=$data_dir/nu20102002001_att.fits hkfile=$data_dir/nu20102002001A_fpm.hk \
-		usrgtifile=$gti_dir/flare_0410_0415_gti.fits \
-		bkgregionfile=$reg_dir/bkdA.reg
-	nuproducts indir=$data_dir instrument=FPMB steminputs=nu20102002001 \
-		outdir=./intervals/0410/ extended=no runmkarf=yes runmkrmf=yes \
-		infile=$data_dir/nu20102002001B06_cl_grade0.evt \
-		srcregionfile=$reg_dir/regB.reg  \
-		attfile=$data_dir/nu20102002001_att.fits hkfile=$data_dir/nu20102002001B_fpm.hk \
-		usrgtifile=$gti_dir/flare_0410_0415_gti.fits \
-		bkgregionfile=$reg_dir/bkdB.reg
 	
 
 5. Prior to starting XSPEC, we can do adaptive binning using the FTOOL GRPPHA.
