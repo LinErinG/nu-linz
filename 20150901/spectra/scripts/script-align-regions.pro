@@ -1,6 +1,6 @@
 ; Script for doing/checking coalignment of region files.
 
-time_new = '2015-09-01 04:06:30'
+t_target = '2015-09-01 04:06:30'
 time_ref = '2015-09-01 04:00:15'
 align_file = 'regions/20150901_alignment_aiafexviii_v20161019.txt'
 indir = 'regions/'
@@ -8,8 +8,8 @@ outdir = 'regions/temp/'
 regA = 'regA_peak.reg'
 regB = 'regB_peak.reg'
 
-nustar_adjust_region, '2015-09-01 04:06:30', time_ref, regA, align_file, indir=indir, new='test.reg'
-;nustar_adjust_region, '2015-09-01 04:06:30', time_ref, regB, align_file, indir=indir, new='test.reg'
+nustar_adjust_region, t_target, time_ref, regA, align_file, indir=indir, new='regA_0406.reg'
+;nustar_adjust_region, t_target, time_ref, regB, align_file, indir=indir, new='test.reg'
 
 ; Generate 1-min EVT files for whole 20 minutes.
 

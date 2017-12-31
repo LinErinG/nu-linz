@@ -17,6 +17,40 @@ tr_bkg = '2015-sep-01 '+['041000','041500']				; background interval
 make_map_nustar, '20102002001', maindir=data_dir, grdid=1, shift=shift, erang=[2,4], /plot, /xflip, /major_chu, tr=tr_bkg
 make_map_nustar, '20102002001', maindir=data_dir, grdid=1, shift=shift, erang=[4,6], /plot, /xflip, /major_chu, tr=tr_bkg
 
+; Just the active region itself:
+
+shift = -[-30,25]		; Shift needed to co-align with AIA
+data_dir = '~/data/nustar/20150901/'
+tra = '2015-sep-01 '+['0430','0447']
+  make_map_nustar, '20102002001', maindir=data_dir, grdid=1, shift=shift, erang=[2,4], /xflip, /plot, /major_chu, tr=tra
+  make_map_nustar, '20102002001', maindir=data_dir, grdid=1, shift=shift, erang=[4,6], /xflip, /plot, /major_chu, tr=tra
+
+f=file_search('out_files/map_CHU23_GRD1_E2_4_FPMA_04:30:00_04:47:00.fits')
+fits2map,f,m
+m.data = gauss_smooth( m.data, 7 )
+loadct, 1
+popen, xsi=7, ysi=7
+m.id = 'NuSTAR 2-4 keV'
+plot_map, shift_map(m,-45,0), /limb, grid=20, /log, dmin=0.1, xth=3, yth=3, charsi=1.5, $
+	lcol=255, lth=3, gcol=255, title='NuSTAR 2-4 keV 2015-09-01 04:30-04:47 UT'
+pclose
+spawn, 'open plot.ps'
+
+
+; This was for the 2017 HSR proposal.
+
+f=file_search('~/nustar/20160726/quicklook/eastlimb/*.fits')
+fits2map,f[0],m
+m.data = gauss_smooth( m.data, 4 )
+loadct, 7
+popen, 'plot1', xsi=7, ysi=7
+plot_map, m, /limb, grid=20, /log, dmin=0.1, xth=3, yth=3, charsi=1.5, $
+	lcol=255, lth=3, gcol=255, title='NuSTAR 2-4 keV 2016-07-26 23:27-23:28 UT'
+pclose
+spawn, 'open plot1.ps'
+
+
+
 
 
 ; Plot the results.
