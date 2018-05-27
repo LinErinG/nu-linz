@@ -1,3 +1,12 @@
+;;; Make the month directories
+.r
+for i=1,12 do begin
+	if i lt 10 then istr = '0'+strtrim(i,2) else istr = strtrim(i,2)
+	spawn, 'mkdir '+istr
+endfor
+end
+
+;;; Make the day directories
 .r
 for i=1,12 do begin
 	for j=1,31 do begin

@@ -74,7 +74,15 @@ data_dir1 = '~/data/nustar/20170821/20312001_Sol_17233_eclipse_MOS01/'
 data_dir2 = '~/data/nustar/20170821/20312002_Sol_17233_eclipse_MOS02/'
 make_pileup_maps, '20312001001', maindir=data_dir1, /xflip, tr=tra, cen=cen
 
-fits2map,file_search('out_files/map_FPM*'),m
+fits2map,file_search('out_files/map_FPMB*18:55*19:00*'),m
+
+!p.multi=[0,2,1]
+!y.margin=6
+plot_map, m[0], cen=cen, fov=16, /cbar, dmin=0.0, dmax=0.03, charsi=1.5
+plot_map, m[1], cen=cen, fov=16, dmin=0.0, dmax=0.03, charsi=1.5
+!p.multi=0
+
+plot_map, m[2], cen=cen, fov=16, /cbar, charsi=1.5
 
 
 t0 = '2017-aug-21 1850'
