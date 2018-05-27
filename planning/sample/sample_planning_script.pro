@@ -3,6 +3,9 @@
 ; This script uses the May 29, 2018 observation as an example.
 ;
 
+; The needed routines are in the NuSTAR shared DropBox.  If you downloaded this script 
+; from GitHub, there is a copy of this directory in the main directory.
+
 ; (1) Download latest AIA files using download_latest:
 
 download_latest, instr='aia', wave=94
